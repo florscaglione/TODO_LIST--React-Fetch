@@ -11,3 +11,22 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+
+.tasks{
+    .task{
+        .delete{
+            display: none;
+        }
+        &:hover{
+            .delete{
+                display: inline;
+            }
+        }
+        &.repeated{
+            border: 2px solid red;
+        }
+    }
+}
+.tasks{
+    list-style:none
+}
