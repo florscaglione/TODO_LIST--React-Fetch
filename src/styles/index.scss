@@ -1,17 +1,5 @@
 @import "~bootstrap/scss/bootstrap.scss";
 
-/* 
-
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
-
-*/
-
 .tasks{
     padding-top: 20px;
     padding-right: 53px;
@@ -48,6 +36,8 @@ li::before { /* Añadimos contenido antes de cada elemento de la lista */
 .tasksList{
     background-color: #ecc3d0 ;
     width: 300px;
+    border: none;
+    border-bottom-style: dashed; border-bottom-width: 1px;
 }
 
 input.error{
@@ -66,7 +56,6 @@ body {
   
 .container{
     width: 600px;
-    
     background: rgba(95, 91, 93, 0.2);
     padding: 40px;
     border: 2px solid #ebdadf ;

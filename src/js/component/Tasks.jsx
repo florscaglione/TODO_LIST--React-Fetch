@@ -1,6 +1,5 @@
-//import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import InputTask from "./InputTask.jsx";
+
 import TaskLi from "./TaskLi.jsx";
 
 //create your first component
