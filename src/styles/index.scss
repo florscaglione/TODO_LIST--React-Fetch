@@ -13,6 +13,8 @@
 */
 
 .tasks{
+    padding-top: 20px;
+    padding-right: 53px;
     .task{
         .delete{
             display: none;
@@ -20,6 +22,7 @@
         &:hover{
             .delete{
                 display: inline;
+                background-color: rgb(184, 182, 182);
             }
         }
         &.repeated{
@@ -27,6 +30,49 @@
         }
     }
 }
-.tasks{
-    list-style:none
+
+.task{
+    list-style: none;
+}
+
+input{
+    width: 300px;
+}
+
+li::before { /* Añadimos contenido antes de cada elemento de la lista */
+    content: "\25D8"; /* Insertamos el marcador */
+    padding-right: 5px; /* Establecemos el espacio entre las viñetas y el list item */
+    color: rgb(136, 38, 76); /* Coloreamos la viñeta */
+}
+
+.tasksList{
+    background-color: #ecc3d0 ;
+    width: 300px;
+}
+
+input.error{
+    border: 2px solid red;
+}
+
+html {
+    height: 100%;
+    display: flex;
+}
+body {
+    width: 100%;
+    margin-top: 60px;
+    background-image: linear-gradient(19deg, white 0%, #e43e75  100%);
+}
+  
+.container{
+    width: 600px;
+    
+    background: rgba(95, 91, 93, 0.2);
+    padding: 40px;
+    border: 2px solid #ebdadf ;
+}
+
+.App {
+    font-family: sans-serif;
+    text-align: center;
 }
