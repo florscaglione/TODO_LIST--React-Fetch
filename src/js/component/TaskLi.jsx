@@ -1,36 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TaskLi = ({ task, taskExists, index, modifyTask, deleteTask }) => {
-	//pongo como parámetros todas las funciones y vbles. que no están
+const TaskLi = ({ task, taskExists, modifyTask, deleteTask, key }) => {
+	//pongo como parámetros todas las funciones y vbles. que no están definidas en este componente,y luego las defino como propTypes
 	return (
-		//definidas en este componente,y luego las defino como propTypes
 		<li className={"task " + (taskExists ? "repeated" : "")}>
 			<input
 				className="tasksList"
 				type="text"
-				value={task}
+				value={task.label}
 				onChange={event => {
-					modifyTask(event.target.value, index);
+					modifyTask(event.target.value, task.id);
 				}}
 			/>
 			<button
 				className="delete"
 				onClick={() => {
-					deleteTask(index); //le paso la posicion directamente a la fcion. de borrado
+					deleteTask(key); //le paso la posicion directamente a la fcion. de borrado
 				}}>
-				X
+				<i className="fas fa-trash-alt" />
 			</button>
 		</li>
 	);
 };
 
 TaskLi.propTypes = {
-	task: PropTypes.string,
+	task: PropTypes.object,
 	taskExists: PropTypes.bool,
 	index: PropTypes.number,
 	modifyTask: PropTypes.func,
-	deleteTask: PropTypes.func
+	deleteTask: PropTypes.func,
+	key: PropTypes.number
 };
 
 export default TaskLi;
