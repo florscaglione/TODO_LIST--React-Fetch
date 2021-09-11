@@ -1,3 +1,4 @@
+import { element } from "prop-types";
 import React, { useEffect, useState } from "react";
 
 import TaskLi from "./TaskLi.jsx";
@@ -9,6 +10,10 @@ const Tasks = () => {
 	const [taskExists, setTaskExists] = useState(false);
 
 	useEffect(() => {
+		getTodo();
+	}, []); //array vacío como seg. parámetro para que se ejecute sólo una vez, al cargar la pág.
+
+	function getTodo() {
 		fetch(
 			"https://assets.breatheco.de/apis/fake/todos/user/florscaglione",
 			{
@@ -19,6 +24,9 @@ const Tasks = () => {
 			}
 		)
 			.then(response => {
+				if (response.status == 404) {
+					createUserTodos();
+				}
 				return response.json();
 			})
 			.then(responseJson => {
@@ -27,7 +35,7 @@ const Tasks = () => {
 			.catch(error => {
 				console.log(error);
 			});
-	}, []); //array vacío como seg. parámetro para que se ejecute sólo una vez, al cargar la pág.
+	}
 
 	function createUserTodos() {
 		fetch(
@@ -42,6 +50,9 @@ const Tasks = () => {
 		)
 			.then(resp => {
 				console.log(resp);
+				if (resp.status == 200) {
+					getTodo();
+				}
 				return resp.json();
 			})
 			.then(data => {
@@ -72,26 +83,27 @@ const Tasks = () => {
 	}
 
 	useEffect(() => {
-		fetch(
-			"https://assets.breatheco.de/apis/fake/todos/user/florscaglione",
-			{
-				method: "PUT",
-				body: JSON.stringify(tasks), //usamos stringify para que la tarea no se envie a la API en formato array sino como texto plano(le quito el formato JSON,se transforma)
-				headers: {
-					"Content-Type": "application/json"
+		if (tasks.length > 0) {
+			fetch(
+				"https://assets.breatheco.de/apis/fake/todos/user/florscaglione",
+				{
+					method: "PUT",
+					body: JSON.stringify(tasks), //usamos stringify para que la tarea no se envie a la API en formato array sino como texto plano(le quito el formato JSON,se transforma)
+					headers: {
+						"Content-Type": "application/json"
+					}
 				}
-			}
-		)
-			.then(response => {
-				console.log("OJO! ", tasks); // POR QUÉ AQUÍ ESTÁ TASKS VACÍO?????? esto me da el error 400 en el PUT
-				return response.json();
-			})
-			.then(responseJson => {
-				console.log(responseJson);
-			})
-			.catch(error => {
-				console.log(error);
-			});
+			)
+				.then(response => {
+					console.log("OJO! ", tasks);
+				})
+				.then(responseJson => {
+					console.log(responseJson);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
 	}, [tasks]);
 
 	//añadir tarea
@@ -102,14 +114,19 @@ const Tasks = () => {
 		}
 	}
 
+	console.log(tasks);
+
 	//borrar tarea
 	function deleteTask(index) {
-		let newTasks = [...tasks]; //los 3 puntos mandan una copia del array
-		let indexToRemove = newTasks.findIndex(task => index === indexToRemove);
-		console.log(indexToRemove);
-		newTasks.splice(indexToRemove, 1);
-		setTasks(newTasks); //SOLUCIONAR: no me está reconociendo el index que borro, por eso borra en orden
+		let newTasks = [...tasks];
+		newTasks.splice(index, 1);
+		setTasks(newTasks);
 	}
+
+	/* function deleteTask(elementIndex) {
+		var filtered = tasks.filter((task, index) => index !== elementIndex);
+		setTasks(filtered);
+	} */
 
 	//según esta API, este método DELETE borra todo,incluido el usuario (hay que volver a crearlo después de darle al botón "DELETE ALL")
 	function deleteTodos() {
@@ -128,11 +145,14 @@ const Tasks = () => {
 			})
 			.then(data => {
 				console.log(data);
+				if (data.result == "ok") {
+					setTasks([]);
+					createUserTodos();
+				}
 			})
 			.catch(error => {
 				console.log(error);
 			});
-		createUserTodos();
 	}
 
 	//modificar tarea existentes (modificado en el de fetch)
@@ -174,6 +194,7 @@ const Tasks = () => {
 						taskExists={task.label === newTask.label}
 						//modifyTask={modifyTask}
 						deleteTask={deleteTask}
+						index={index}
 					/>
 				))}
 			</ul>
