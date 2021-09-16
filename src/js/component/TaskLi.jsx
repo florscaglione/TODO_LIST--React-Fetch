@@ -10,7 +10,7 @@ const TaskLi = ({ task, taskExists, modifyTask, deleteTask, index }) => {
 				type="text"
 				value={task.label}
 				onChange={event => {
-					modifyTask(event.target.value, task.id);
+					modifyTask(event.target.value, index);
 				}}
 			/>
 			<button

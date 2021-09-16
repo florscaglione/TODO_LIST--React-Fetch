@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 import TaskLi from "./TaskLi.jsx";
 
-//create your first component
 const Tasks = () => {
 	const [tasks, setTasks] = useState([]);
 	const [newTask, setNewTask] = useState({});
@@ -25,7 +24,8 @@ const Tasks = () => {
 		)
 			.then(response => {
 				if (response.status == 404) {
-					createUserTodos();
+					//si da error 404 es porque no hay user
+					createUserTodos(); //entonces se va a crearlo con el POST
 				}
 				return response.json();
 			})
@@ -49,9 +49,10 @@ const Tasks = () => {
 			}
 		)
 			.then(resp => {
-				console.log(resp);
+				//console.log(resp);
 				if (resp.status == 200) {
-					getTodo();
+					//si la respuesta es "ok" (es decir,si se ha creado correctamente el user)
+					getTodo(); //se va a hacer la peticion GET para traer las tareas
 				}
 				return resp.json();
 			})
@@ -69,7 +70,7 @@ const Tasks = () => {
 
 	useEffect(() => {
 		findDuplicateTasks();
-	}, [newTask.label]); //con este seg. parámetro le digo que el useEffect se ejecute cada vez que newTask cambia
+	}, [newTask.label]); //con este 2º parámetro le digo que el useEffect se ejecute cada vez que newTask.label cambia
 
 	//comprobar si la tarea ya existe
 	function findDuplicateTasks() {
@@ -84,6 +85,7 @@ const Tasks = () => {
 
 	useEffect(() => {
 		if (tasks.length > 0) {
+			//la "longitud del array de tareas es > 0" significa que TIENE TAREAS
 			fetch(
 				"https://assets.breatheco.de/apis/fake/todos/user/florscaglione",
 				{
@@ -95,7 +97,7 @@ const Tasks = () => {
 				}
 			)
 				.then(response => {
-					console.log("OJO! ", tasks);
+					console.log(tasks);
 				})
 				.then(responseJson => {
 					console.log(responseJson);
@@ -104,7 +106,7 @@ const Tasks = () => {
 					console.log(error);
 				});
 		}
-	}, [tasks]);
+	}, [tasks]); //con este 2º parámetro le digo que el useEffect se ejecute cada vez que el array de tareas cambia
 
 	//añadir tarea
 	function addNewTask(event) {
@@ -114,19 +116,12 @@ const Tasks = () => {
 		}
 	}
 
-	console.log(tasks);
-
 	//borrar tarea
 	function deleteTask(index) {
 		let newTasks = [...tasks];
 		newTasks.splice(index, 1);
 		setTasks(newTasks);
 	}
-
-	/* function deleteTask(elementIndex) {
-		var filtered = tasks.filter((task, index) => index !== elementIndex);
-		setTasks(filtered);
-	} */
 
 	//según esta API, este método DELETE borra todo,incluido el usuario (hay que volver a crearlo después de darle al botón "DELETE ALL")
 	function deleteTodos() {
@@ -146,8 +141,8 @@ const Tasks = () => {
 			.then(data => {
 				console.log(data);
 				if (data.result == "ok") {
-					setTasks([]);
-					createUserTodos();
+					setTasks([]); //si el DELETE funciona, borra la lista de tareas(solo aparece 1 por defecto,la de ejemplo)
+					createUserTodos(); //y entonces, me lleva a crear directamente un nuevo user con POST
 				}
 			})
 			.catch(error => {
@@ -155,23 +150,12 @@ const Tasks = () => {
 			});
 	}
 
-	//modificar tarea existentes (modificado en el de fetch)
-	/* 		function modifyTask(newValue, id) {
-		//Nos da el valor nuevo de la tarea y su posicion en el array
+	//modificar tarea existentes (modificado en el de fetch) -- NO FUNCIONA (ARREGLAR!)
+	/* 	function modifyTask(newValue, index) {
 		let newTasks = [...tasks]; //hago una copia del array de tareas y lo llamo NuevasTareas
-		let position = newTasks.findIndex(task => task.id === id);
-		let task = newTasks.find(task => task.id === id);
-		task.label = newValue;
-		newTasks.splice(position, 1, task.label); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
+		let position = newTasks.findIndex(task => task.id === index);
+		newTasks.splice(position, 1, { label: newValue }); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
 		setTasks(newTasks); //lo establecemos
-	} */
-
-	//modificar tarea existente (original en el de react)
-	/* 	function modifyTask(newValue, position) {
-		//Nos da el valor nuevo de la tarea y su posicion en el array
-		let newTasks = [...tasks]; //hago una copia del array de tareas y lo llamo NuevasTareas
-		newTasks.splice(position, 1, newValue); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
-		setTasks(newTasks); //lo establecemos 
 	} */
 
 	return (
