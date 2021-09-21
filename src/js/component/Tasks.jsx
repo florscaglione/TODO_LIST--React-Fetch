@@ -151,12 +151,11 @@ const Tasks = () => {
 	}
 
 	//modificar tarea existentes (modificado en el de fetch) -- NO FUNCIONA (ARREGLAR!)
-	/* 	function modifyTask(newValue, index) {
+	function modifyTask(newValue, position) {
 		let newTasks = [...tasks]; //hago una copia del array de tareas y lo llamo NuevasTareas
-		let position = newTasks.findIndex(task => task.id === index);
-		newTasks.splice(position, 1, { label: newValue }); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
+		newTasks.splice(position, 1, newValue); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
 		setTasks(newTasks); //lo establecemos
-	} */
+	}
 
 	return (
 		<div className="text-center mt-5 container">
@@ -176,7 +175,7 @@ const Tasks = () => {
 						key={index}
 						task={task}
 						taskExists={task.label === newTask.label}
-						//modifyTask={modifyTask}
+						modifyTask={modifyTask}
 						deleteTask={deleteTask}
 						index={index}
 					/>
