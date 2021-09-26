@@ -153,7 +153,9 @@ const Tasks = () => {
 	//modificar tarea existentes (modificado en el de fetch) -- NO FUNCIONA (ARREGLAR!)
 	function modifyTask(newValue, position) {
 		let newTasks = [...tasks]; //hago una copia del array de tareas y lo llamo NuevasTareas
-		newTasks.splice(position, 1, newValue); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
+		let oldValue = tasks.at(position); //devuelve el elemento en la posición que le estás pasando!!
+		let newTask = { ...oldValue, label: newValue };
+		newTasks.splice(position, 1, newTask); //sustituyo en la copia en esa pos. q quiero modificar por el nuevo valor
 		setTasks(newTasks); //lo establecemos
 	}
 
